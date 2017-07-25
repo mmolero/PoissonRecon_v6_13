@@ -283,7 +283,11 @@ public:
 	int addTriangle( int p1 , int p2 , int p3 );
 
 protected:
+#ifdef __linux__ 
 	hash_map<long long,int> edgeMap;
+#else
+	std::map<long long, int> edgeMap;
+#endif
 	static long long EdgeIndex( int p1 , int p2 );
 	double area(const Triangle& t);
 };

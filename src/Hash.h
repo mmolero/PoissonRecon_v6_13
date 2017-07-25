@@ -1,6 +1,8 @@
 #ifndef HASH_INCLUDED
 #define HASH_INCLUDED
 
+#ifdef __linux__ 
+
 #include <ext/hash_map>
 using namespace __gnu_cxx;
 
@@ -21,6 +23,10 @@ namespace __gnu_cxx
     size_t operator()(const unsigned long long __x) const { return __x; }
   };
 }
+
+#else
+#include <map>
+#endif
 
 #endif // HASH_INCLUDED
 
