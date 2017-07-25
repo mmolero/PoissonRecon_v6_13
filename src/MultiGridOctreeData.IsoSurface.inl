@@ -697,7 +697,11 @@ void Octree< Real >::SetSliceIsoEdges( int depth , int slice , int z , std::vect
 #pragma omp critical( add_iso_edge_access )
 						{
 							typename Octree< Real >::template SliceValues< Vertex >& _sValues = slabValues[_depth].sliceValues( _slice );
+#ifdef __linux__
 							typename hash_map< long long , std::vector< IsoEdge > >::iterator iter = _sValues.faceEdgeMap.find(key);
+#else
+							typename std::map< long long, std::vector< IsoEdge > >::iterator iter = _sValues.faceEdgeMap.find(key);
+#endif
 							if( iter==_sValues.faceEdgeMap.end() ) _sValues.faceEdgeMap[key] = edges;
 							else for( int j=0 ; j<fe.count ; j++ ) iter->second.push_back( fe.edges[j] );
 						}
@@ -774,7 +778,11 @@ void Octree< Real >::SetXSliceIsoEdges( int depth , int slab , std::vector< Slab
 #pragma omp critical( add_x_iso_edge_access )
 							{
 								typename Octree< Real >::template XSliceValues< Vertex >& _xValues = slabValues[_depth].xSliceValues( _slab );
+#ifdef __linux__
 								typename hash_map< long long , std::vector< IsoEdge > >::iterator iter = _xValues.faceEdgeMap.find(key);
+#else
+								typename std::map< long long, std::vector< IsoEdge > >::iterator iter = _xValues.faceEdgeMap.find(key);
+#endif
 								if( iter==_xValues.faceEdgeMap.end() ) _xValues.faceEdgeMap[key] = edges;
 								else for( int j=0 ; j<fe.count ; j++ ) iter->second.push_back( fe.edges[j] );
 							}
@@ -825,7 +833,11 @@ int Octree< Real >::SetIsoSurface( int depth , int offset , const SliceValues< V
 						else
 						{
 							long long key = VertexData::FaceIndex( leaf , f , _sNodes.maxDepth );
+#ifdef __linux__
 							typename hash_map< long long , std::vector< IsoEdge > >::const_iterator iter = sValues.faceEdgeMap.find( key );
+#else
+							typename std::map< long long, std::vector< IsoEdge > >::const_iterator iter = sValues.faceEdgeMap.find(key);
+#endif
 							if( iter!=sValues.faceEdgeMap.end() )
 							{
 								const std::vector< IsoEdge >& _edges = iter->second;
@@ -845,7 +857,11 @@ int Octree< Real >::SetIsoSurface( int depth , int offset , const SliceValues< V
 						else
 						{
 							long long key = VertexData::FaceIndex( leaf , f , _sNodes.maxDepth );
+#ifdef __linux__
 							typename hash_map< long long , std::vector< IsoEdge > >::const_iterator iter = xValues.faceEdgeMap.find( key );
+#else
+							typename std::map< long long, std::vector< IsoEdge > >::const_iterator iter = xValues.faceEdgeMap.find(key);
+#endif
 							if( iter!=xValues.faceEdgeMap.end() )
 							{
 								const std::vector< IsoEdge >& _edges = iter->second;
@@ -869,7 +885,11 @@ int Octree< Real >::SetIsoSurface( int depth , int offset , const SliceValues< V
 						for( idx=0 ; idx<edges.size() ; idx++ ) if( edges[idx][0]==current ) break;
 						if( idx==edges.size() )
 						{
+#ifdef __linux__
 							typename hash_map< long long , long long >::const_iterator iter;
+#else
+							typename std::map< long long, long long >::const_iterator iter;
+#endif
 							if     ( (iter=bValues.vertexPairMap.find(current))!=bValues.vertexPairMap.end() ) loops.back().push_back( current ) , current = iter->second;
 							else if( (iter=fValues.vertexPairMap.find(current))!=fValues.vertexPairMap.end() ) loops.back().push_back( current ) , current = iter->second;
 							else if( (iter=xValues.vertexPairMap.find(current))!=xValues.vertexPairMap.end() ) loops.back().push_back( current ) , current = iter->second;
@@ -891,7 +911,11 @@ int Octree< Real >::SetIsoSurface( int depth , int offset , const SliceValues< V
 					for( int k=0 ; k<loops[j].size() ; k++ )
 					{
 						long long key = loops[j][k];
+#ifdef __linux__
 						typename hash_map< long long , std::pair< int , Vertex > >::const_iterator iter;
+#else
+						typename std::map< long long, std::pair< int, Vertex > >::const_iterator iter;
+#endif
 						if     ( ( iter=bValues.edgeVertexMap.find( key ) )!=bValues.edgeVertexMap.end() ) polygon[k] = iter->second;
 						else if( ( iter=fValues.edgeVertexMap.find( key ) )!=fValues.edgeVertexMap.end() ) polygon[k] = iter->second;
 						else if( ( iter=xValues.edgeVertexMap.find( key ) )!=xValues.edgeVertexMap.end() ) polygon[k] = iter->second;

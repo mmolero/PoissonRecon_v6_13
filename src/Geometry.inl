@@ -324,7 +324,11 @@ double Triangulation<Real>::area(void){
 }
 template<class Real>
 int Triangulation<Real>::addTriangle(int p1,int p2,int p3){
+#ifdef __linux__ 
 	hash_map<long long,int>::iterator iter;
+#elif _WIN32
+	std::map<long long, int>::iterator iter;
+#endif
 	int tIdx,eIdx,p[3];
 	p[0]=p1;
 	p[1]=p2;

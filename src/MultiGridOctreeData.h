@@ -329,9 +329,15 @@ protected:
 		Pointer( long long ) edgeKeys ; Pointer( char ) edgeSet;
 		Pointer( FaceEdges ) faceEdges ; Pointer( char ) faceSet;
 		Pointer( char ) mcIndices;
+#ifdef __linux__ 
 		hash_map< long long , std::vector< IsoEdge > > faceEdgeMap;
 		hash_map< long long , std::pair< int , Vertex > > edgeVertexMap;
 		hash_map< long long , long long > vertexPairMap;
+#else
+		std::map< long long, std::vector< IsoEdge > > faceEdgeMap;
+		std::map< long long, std::pair< int, Vertex > > edgeVertexMap;
+		std::map< long long, long long > vertexPairMap;
+#endif
 
 		SliceValues( void );
 		~SliceValues( void );
@@ -345,9 +351,16 @@ protected:
 		typename SortedTreeNodes::XSliceTableData xSliceData;
 		Pointer( long long ) edgeKeys ; Pointer( char ) edgeSet;
 		Pointer( FaceEdges ) faceEdges ; Pointer( char ) faceSet;
+
+#ifdef __linux__
 		hash_map< long long , std::vector< IsoEdge > > faceEdgeMap;
 		hash_map< long long , std::pair< int , Vertex > > edgeVertexMap;
 		hash_map< long long , long long > vertexPairMap;
+#else
+		std::map< long long, std::vector< IsoEdge > > faceEdgeMap;
+		std::map< long long, std::pair< int, Vertex > > edgeVertexMap;
+		std::map< long long, long long > vertexPairMap;
+#endif
 
 		XSliceValues( void );
 		~XSliceValues( void );
